@@ -10,6 +10,10 @@ const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
 // Import errorHandler
 const errorHandler = require('./middleware/errorHandler');
+// Import cookie parser
+const cookieParser = require('cookie-parser');
+// Import verifyJWT handler
+const verifyJWT = require('./middleware/verifyJWT');
 // Connect to db
 require('./db/conn');
 
@@ -24,14 +28,21 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
+// Handle cookies
+app.use(cookieParser());
+
 /**
  * --------------Routes--------------------------------
  */
+// dev api 
+app.use(require('./routes/index'));
 app.use('/smartCan', require('./routes/smartCan'));
-
+// User api
+app.use(verifyJWT);
 
 // Handle errors
 app.use(errorHandler)
+app.use('/user', require('./routes/api/userSmartCan'));
 
 app.listen(PORT, () => {
     console.log('Always love you in ' + PORT);

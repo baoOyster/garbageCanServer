@@ -56,7 +56,7 @@ const getFullState = async (req, res, next) => {
     try {
         const { id } = req.query;
         const myCan = await SmartCan.findById(id);
-        if(!myCan) new Error('Couldn\'t find the requested can');
+        if(!myCan) throw new Error('Couldn\'t find the requested can');
         res.json({is_full: myCan.is_full, success: true});
     } catch (error) {
         next(error);
@@ -68,7 +68,7 @@ const switchingFullState = async (req, res, next) => {
     try {
         const { id } = req.query;
         const myCan = await SmartCan.findById(id);
-        if(!myCan) new Error('Couldn\'t find the requested can');
+        if(!myCan) throw new Error('Couldn\'t find the requested can');
         if(myCan.is_full) myCan.is_full = false;
         else myCan.is_full = true; 
         await myCan.save();

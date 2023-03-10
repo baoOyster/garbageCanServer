@@ -11,7 +11,7 @@ const getUserById = async (req, res, next) => {
     try {
         const {id} = req.query;
         const user = await User.findById(id);
-        if(!user) new Error(`There are\'t any user with the id of ${id}`);
+        if(!user) throw new Error(`There are\'t any user with the id of ${id}`);
         res.json({user, success: true});
     } catch (error) {
         next(error);
@@ -23,7 +23,7 @@ const addSmartCanToAccountById = async (req, res, next) => {
     try {
         const {id, canId} = req.query;
         const foundCan = await SmartCan.findById(canId);
-        if(!foundCan) new Error(`Couldn't find smart can with id ${id}`);
+        if(!foundCan) throw new Error(`Couldn't find smart can with id ${id}`);
         foundCan.owner_id.push(id);
         await foundCan.save();
         res.json({mes: `Can with id ${id} has been added to your account successfully`, success: true});
@@ -37,10 +37,10 @@ const discardACanFromAccount = async (req, res, next) => {
     try {
         const {id, canId} = req.query;
         const foundCan = await SmartCan.findById(canId);
-        if(!foundCan) new Error(`Could not find the can with id ${id}`);
+        if(!foundCan) throw new Error(`Could not find the can with id ${id}`);
         foundCan.owner_id = foundCan.owner_id.filter(personId => personId != id);
         await foundCan.save();
-        res.status(204).json({mes: `Smart can with ${id} has been discarded from your account`});
+        res.status(204).json({mes: `Smart can with ${id} has been discarded from your account`, success: true});
     } catch (error) {
         next(error);
     }
@@ -52,13 +52,13 @@ const updateAUser = async (req, res, next) => {
         const {id} = req.query;
         const {password, newUsername, newPassword} = req.body;
         const foundUser = await User.findById(id);
-        if(!foundUser) new Error(`Couldn\'t find any user with the id of ${id}`);
+        if(!foundUser) throw new Error(`Couldn\'t find any user with the id of ${id}`);
         const passwordValidation = await comparePasswords(password, foundUser.password);
-        if(!passwordValidation) new Error('Please provide the valid password');
+        if(!passwordValidation) throw new Error('Please provide the valid password');
         foundUser.username = newUsername;
         foundUser.password = newPassword;
         await foundUser.save();
-        res.status(200).json({mes: `User with id of ${id} username and password has been updated successfully`, success: true});   
+        res.json({mes: `User with id of ${id} username and password has been updated successfully`, success: true});   
     } catch (error) {
         next(error);
     }
