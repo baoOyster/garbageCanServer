@@ -39,10 +39,10 @@ app.use(require('./routes/index'));
 app.use('/smartCan', require('./routes/smartCan'));
 // User api
 app.use(verifyJWT);
+app.use('/user', require('./routes/api/userSmartCan'));
 
 // Handle errors
 app.use(errorHandler)
-app.use('/user', require('./routes/api/userSmartCan'));
 
 app.listen(PORT, () => {
     console.log('Always love you in ' + PORT);
