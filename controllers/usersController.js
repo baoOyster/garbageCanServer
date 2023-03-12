@@ -19,7 +19,7 @@ const getUserByToken = async (req, res, next) => {
         if(!user) throw new Error(`No user found`);
 
         // Get all user data
-        const allOwnedCan = await SmartCan.find({owner_id: user._id}, {is_full: 1});
+        const allOwnedCan = await SmartCan.find({owner_id: user._id}, {is_full: 1, name: 1});
 
         res.json({allOwnedCan, success: true});
     } catch (error) {
