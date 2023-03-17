@@ -117,6 +117,18 @@ const deleteAUser = async (req, res, next) => {
         // Check toke availability
         if(!token) throw new Error('Unauthorized');
 
+        // Delete user ownership on all cans
+        const user = await User.findOne({token: token});
+        const userId = user._id.toString();
+        const canArray = await SmartCan.find({owner_id: userId});
+        if(canArray.length > 0) {
+            canArray.forEach(async (can) => {
+                const removedCan = await SmartCan.findById(can._id);
+                removedCan.owner_id = removedCan.owner_id.filter(id => id !== userId);
+                await removedCan.save(); 
+            })
+        }
+
         // Delete user from the database
         await User.deleteOne({token: token});
         res.status(204).json({mes: `User has been deleted`, success: true});
