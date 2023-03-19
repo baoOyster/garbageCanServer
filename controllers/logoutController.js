@@ -2,16 +2,13 @@ const User = require('../db/User');
 
 const logout = async (req, res, next) => {
     try {
-        // Remember to check that you must delete the token on the client side
-        const cookies = req.cookies;
-        if(!cookies?.jwt) throw new Error('No cookie founded!'); // NO content
-        const token = cookies.jwt;
+        const {token} = req.query;
 
         // Is token in the db
         const foundUser = await User.findOne({ token: token });
         if(!foundUser){
             res.clearCookie('jwt', { httpOnly: false, sameSite: 'None', secure: false });
-            throw new Error('No user with the specified token found!'); // NO content
+            res.sendStatus(204); // NO content
         }
 
         // Delete token in db
