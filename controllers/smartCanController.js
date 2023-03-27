@@ -69,13 +69,23 @@ const switchingFullState = async (req, res, next) => {
     // Switching the full state
     try {
         const { id } = req.query;
+
+        // Getting full_state from request body
+        const {full_state} = req.body;
+
+        // Does the id is provided
         if(!id) throw new Error('Please provide an id');
+
+        // Checking if the full_state is boolean
+        if(!typeof(full_state) === 'boolean') throw new Error('full_state must be boolean'); 
+
+        // Is the smartCan even available
         const myCan = await SmartCan.findById(id);
         if(!myCan) throw new Error('Couldn\'t find the requested can');
-        if(myCan.is_full) myCan.is_full = false;
-        else myCan.is_full = true; 
+
+        myCan.is_full = full_state
         await myCan.save();
-        res.status(200).json({mes: `The full state have been switched to ${myCan.is_full}`, success: true});
+        res.status(200).json({full_state: myCan.is_full, success: true});
     } catch (error) {
         next(error);
     }
