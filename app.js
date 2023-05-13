@@ -1,8 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT;
 // Using .env variable
-require('dotenv').config();
 // Import credentials
 const credentials = require('./middleware/credentials');
 // Import Cors 

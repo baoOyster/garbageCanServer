@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {getUserByToken, addSmartCanToAccountByToken, discardACanFromAccount, updateAUser, deleteAUser} = require('../../controllers/usersController');
-const {switchingFullState, updateSmartCanName} = require('../../controllers//smartCanController');
+const {switchingFullState, updateSmartCanName} = require('../../controllers/smartCanController');
 
 router.route('/home')
     .get(getUserByToken)
