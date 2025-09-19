@@ -11,7 +11,7 @@
   "author": "Nghiem Gia Bao",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.21"
+    "nodemon": "^3.1.10"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
